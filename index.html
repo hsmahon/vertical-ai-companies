@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertical-AI-Companies</title>
+    <meta
+      name="description"
+      content="A curated tracker of Vertical AI companies with a restrained monochrome presentation."
+    />
+    <style>
+      :root {
+        --bg: #070707;
+        --bg-deep: #040404;
+        --surface: rgba(255, 255, 255, 0.03);
+        --surface-strong: rgba(255, 255, 255, 0.055);
+        --surface-active: rgba(255, 255, 255, 0.1);
+        --line: rgba(255, 255, 255, 0.12);
+        --line-soft: rgba(255, 255, 255, 0.07);
+        --text: #f5f5f0;
+        --muted: #9f9f9b;
+        --accent: #d8d4c8;
+        --max: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        color-scheme: dark;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        color: var(--text);
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+          radial-gradient(circle at top center, rgba(255, 255, 255, 0.08), transparent 36%),
+          linear-gradient(180deg, var(--bg-deep), var(--bg));
+        background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-color: rgba(255, 255, 255, 0.32);
+        text-underline-offset: 0.18em;
+        transition: text-decoration-color 180ms ease, opacity 180ms ease;
+      }
+
+      a:hover {
+        text-decoration-color: rgba(255, 255, 255, 0.8);
+      }
+
+      .page {
+        position: relative;
+      }
+
+      .hero {
+        min-height: min(48svh, 420px);
+        padding: 24px 24px 12px;
+        display: grid;
+        align-items: end;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 78% 20%, rgba(255, 255, 255, 0.1), transparent 28%),
+          linear-gradient(125deg, transparent 0%, rgba(255, 255, 255, 0.025) 45%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .hero-inner,
+      .section-inner {
+        width: min(100%, var(--max));
+        margin: 0 auto;
+      }
+
+      .hero-inner {
+        position: relative;
+      }
+
+      .hero-copy {
+        max-width: 760px;
+        animation: rise 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+
+      .brand {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.74rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 8ch;
+        font-size: clamp(4rem, 10vw, 8.2rem);
+        line-height: 0.9;
+        letter-spacing: -0.08em;
+      }
+
+      .hero-copy p {
+        margin: 14px 0 0;
+        max-width: 30rem;
+        font-size: clamp(1rem, 1.5vw, 1.15rem);
+        line-height: 1.7;
+        color: #c7c7c1;
+      }
+
+      .tracker {
+        padding: 0 24px 64px;
+      }
+
+      .section-inner {
+        display: grid;
+        gap: 16px;
+      }
+
+      .table-shell {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 16%);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 860px;
+        border-collapse: collapse;
+      }
+
+      thead th {
+        padding: 0;
+        text-align: left;
+        font-size: 0.74rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
+        border-right: 1px solid var(--line-soft);
+      }
+
+      tbody td {
+        padding: 22px 16px;
+        vertical-align: top;
+        border-bottom: 1px solid var(--line-soft);
+        border-right: 1px solid var(--line-soft);
+        font-size: 0.96rem;
+        line-height: 1.6;
+        transition: background-color 220ms ease, transform 220ms ease;
+      }
+
+      thead th:last-child,
+      tbody td:last-child {
+        border-right: 0;
+      }
+
+      tbody tr {
+        animation: fade-in 700ms ease both;
+      }
+
+      tbody tr:nth-child(2) {
+        animation-delay: 70ms;
+      }
+
+      tbody tr:nth-child(3) {
+        animation-delay: 140ms;
+      }
+
+      tbody tr:hover td {
+        background: var(--surface);
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .header-label {
+        display: block;
+        padding: 18px 16px;
+      }
+
+      .sort-header-button {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px 16px;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+        transition: color 180ms ease, background-color 180ms ease;
+      }
+
+      .sort-header-button:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+      }
+
+      .sort-header-button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+
+      .sort-header-button[aria-sort-state="active"] {
+        color: var(--text);
+      }
+
+      .sort-arrow {
+        min-width: 1ch;
+        color: var(--muted);
+        font-size: 0.9rem;
+        letter-spacing: 0;
+        opacity: 0.7;
+      }
+
+      .sort-header-button[aria-sort-state="active"] .sort-arrow {
+        color: var(--accent);
+      }
+
+      .company-cell strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1.06rem;
+        letter-spacing: -0.02em;
+      }
+
+      .source-links,
+      .table-note,
+      .field-note {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .source-links {
+        white-space: nowrap;
+      }
+
+      .source-links a {
+        white-space: nowrap;
+      }
+
+      .table-note {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          min-height: auto;
+          padding-top: 18px;
+          padding-bottom: 10px;
+        }
+
+        h1 {
+          max-width: none;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .hero,
+        .tracker {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+
+        h1 {
+          font-size: clamp(3.2rem, 18vw, 4.9rem);
+        }
+
+        .hero-copy p {
+          max-width: none;
+        }
+
+        thead th,
+        tbody td {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .header-label,
+        .sort-header-button {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="brand">Vertical-AI-Companies</p>
+            <h1 id="page-title">Vertical Agents</h1>
+            <p>
+              This table tracks vertical AI companies, meaning AI companies built for specific
+              domains such as healthcare, legal, design, and automotive.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="tracker" id="tracker" aria-label="Company tracker">
+        <div class="section-inner">
+          <div class="table-shell">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col"><span class="header-label">Company</span></th>
+                    <th scope="col" aria-sort="none">
+                      <button class="sort-header-button" type="button" data-sort-header="headcount" aria-sort-state="inactive">
+                        <span>Headcount</span>
+                        <span class="sort-arrow" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" aria-sort="none">
+                      <button class="sort-header-button" type="button" data-sort-header="round" aria-sort-state="inactive">
+                        <span>Funding Round</span>
+                        <span class="sort-arrow" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" aria-sort="none">
+                      <button class="sort-header-button" type="button" data-sort-header="amount" aria-sort-state="inactive">
+                        <span>Amount Raised</span>
+                        <span class="sort-arrow" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col"><span class="header-label">Careers Page</span></th>
+                    <th scope="col"><span class="header-label">Sources</span></th>
+                  </tr>
+                </thead>
+                <tbody id="company-table-body">
+                  <tr data-headcount="31" data-round="Series B" data-amount="$210M" data-index="0">
+                    <td class="company-cell">
+                      <strong>OpenEvidence</strong>
+                    </td>
+                    <td>31</td>
+                    <td>Series B</td>
+                    <td>$210M</td>
+                    <td>
+                      <a href="https://jobs.ashbyhq.com/openevidence" target="_blank" rel="noreferrer">
+                        jobs.ashbyhq.com/openevidence
+                      </a>
+                    </td>
+                    <td class="source-links">
+                      <a href="https://ea.linkedin.com/company/openevidence" target="_blank" rel="noreferrer">
+                        Headcount
+                      </a>
+                      |
+                      <a
+                        href="https://www.openevidence.com/announcements/openevidence-the-fastest-growing-application-for-physicians-in-history-announces-dollar210-million-round-at-dollar35-billion-valuation"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Funding
+                      </a>
+                    </td>
+                  </tr>
+                  <tr data-headcount="522" data-round="Series E" data-amount="$300M" data-index="1">
+                    <td class="company-cell">
+                      <strong>Abridge</strong>
+                    </td>
+                    <td>522</td>
+                    <td>Series E</td>
+                    <td>$300M</td>
+                    <td>
+                      <a href="https://jobs.ashbyhq.com/abridge" target="_blank" rel="noreferrer">
+                        jobs.ashbyhq.com/abridge
+                      </a>
+                    </td>
+                    <td class="source-links">
+                      <a href="https://www.linkedin.com/company/abridgehq" target="_blank" rel="noreferrer">
+                        Headcount
+                      </a>
+                      |
+                      <a href="https://www.abridge.com/blog/series-e" target="_blank" rel="noreferrer">
+                        Funding
+                      </a>
+                    </td>
+                  </tr>
+                  <tr data-headcount="1,114" data-round="Series E" data-amount="$300M" data-index="2">
+                    <td class="company-cell">
+                      <strong>Harvey</strong>
+                    </td>
+                    <td>1,114</td>
+                    <td>Series E</td>
+                    <td>$300M</td>
+                    <td>
+                      <a href="https://www.harvey.ai/company/careers" target="_blank" rel="noreferrer">
+                        harvey.ai/company/careers
+                      </a>
+                    </td>
+                    <td class="source-links">
+                      <a href="https://ea.linkedin.com/company/harvey-ai" target="_blank" rel="noreferrer">
+                        Headcount
+                      </a>
+                      |
+                      <a href="https://www.harvey.ai/blog/harvey-raises-series-e" target="_blank" rel="noreferrer">
+                        Funding
+                      </a>
+                    </td>
+                  </tr>
+                  <tr data-headcount="50" data-round="Series B" data-amount="$68M" data-index="3">
+                    <td class="company-cell">
+                      <strong>Gamma.app</strong>
+                    </td>
+                    <td>50</td>
+                    <td>Series B</td>
+                    <td>$68M</td>
+                    <td>
+                      <a href="https://careers.gamma.app/" target="_blank" rel="noreferrer">
+                        careers.gamma.app
+                      </a>
+                    </td>
+                    <td class="source-links">
+                      <a href="https://www.linkedin.com/company/gamma-app" target="_blank" rel="noreferrer">
+                        Headcount
+                      </a>
+                      |
+                      <a href="https://gamma.app/insights/how-we-built-a-usd100m-business-differently" target="_blank" rel="noreferrer">
+                        Funding
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="table-note">
+            Notes: headcount values are public snapshot estimates. Funding rows link to company
+            announcements where available.
+          </p>
+        </div>
+      </section>
+    </main>
+    <script>
+      const sortState = { field: "headcount", direction: "asc" };
+      const roundOrder = {
+        Preseed: 0,
+        Seed: 1,
+        "Series A": 2,
+        "Series B": 3,
+        "Series C": 4,
+        "Series D": 5,
+        "Series E": 6,
+        "Series F": 7,
+        Growth: 8,
+        Public: 9,
+      };
+
+      const tableBody = document.querySelector("#company-table-body");
+      const sortHeaders = Array.from(document.querySelectorAll("[data-sort-header]"));
+      const originalRows = Array.from(tableBody.querySelectorAll("tr"));
+
+      function parseHeadcount(value) {
+        const normalized = value.replace(/,/g, "").trim();
+        if (normalized.includes("-")) {
+          const [min, max] = normalized.split("-").map(Number);
+          return Number.isFinite(max) ? max : min;
+        }
+        return Number(normalized);
+      }
+
+      function parseAmount(value) {
+        const normalized = value.replace(/[$,]/g, "").trim().toUpperCase();
+        const match = normalized.match(/^([0-9]+(?:\.[0-9]+)?)([KMB])?$/);
+        if (!match) {
+          return Number.POSITIVE_INFINITY;
+        }
+
+        const [, amount, suffix] = match;
+        const multipliers = { K: 1e3, M: 1e6, B: 1e9 };
+        return Number(amount) * (multipliers[suffix] || 1);
+      }
+
+      function parseRound(value) {
+        const cleaned = value.trim();
+        return cleaned in roundOrder ? roundOrder[cleaned] : 999;
+      }
+
+      function compareRows(left, right) {
+        const field = sortState.field;
+        if (!field || !sortState.direction) {
+          return Number(left.dataset.index) - Number(right.dataset.index);
+        }
+
+        const parsers = {
+          headcount: (row) => parseHeadcount(row.dataset.headcount),
+          amount: (row) => parseAmount(row.dataset.amount),
+          round: (row) => parseRound(row.dataset.round),
+        };
+
+        const leftValue = parsers[field](left);
+        const rightValue = parsers[field](right);
+
+        if (leftValue === rightValue) {
+          return Number(left.dataset.index) - Number(right.dataset.index);
+        }
+
+        return sortState.direction === "asc" ? leftValue - rightValue : rightValue - leftValue;
+      }
+
+      function renderRows() {
+        const rows = [...originalRows].sort(compareRows);
+        const fragment = document.createDocumentFragment();
+
+        rows.forEach((row) => fragment.appendChild(row));
+        tableBody.appendChild(fragment);
+      }
+
+      function updateHeaders() {
+        sortHeaders.forEach((button) => {
+          const isActive = button.dataset.sortHeader === sortState.field;
+          const th = button.closest("th");
+          const arrow = button.querySelector(".sort-arrow");
+
+          button.setAttribute("aria-sort-state", isActive ? "active" : "inactive");
+          th.setAttribute("aria-sort", isActive ? (sortState.direction === "asc" ? "ascending" : "descending") : "none");
+          arrow.textContent = isActive ? (sortState.direction === "asc" ? "\u2191" : "\u2193") : "\u2195";
+        });
+      }
+
+      function nextDirection(field) {
+        if (sortState.field !== field) {
+          return "asc";
+        }
+        return sortState.direction === "asc" ? "desc" : "asc";
+      }
+
+      sortHeaders.forEach((button) => {
+        button.addEventListener("click", () => {
+          const field = button.dataset.sortHeader;
+          const direction = nextDirection(field);
+
+          sortState.field = field;
+          sortState.direction = direction;
+
+          updateHeaders();
+          renderRows();
+        });
+      });
+
+      updateHeaders();
+      renderRows();
+    </script>
+  </body>
+</html>
